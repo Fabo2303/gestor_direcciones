@@ -5,6 +5,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+import com.fabo.aplication.InitialWindow;
+import com.fabo.aplication.addWindow.AddVideoWindow;
+import com.fabo.aplication.tableWindow.TableVideoWindow;
 import com.fabo.aplication.utils.Constants;
 import com.fabo.aplication.utils.CustomButton;
 import com.fabo.aplication.utils.CustomFormat;
@@ -54,6 +57,10 @@ public class CrudVideoWindow {
     buttonAgregar.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
+        imagePanel.removeAll();
+        new AddVideoWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonAgregar);
@@ -69,7 +76,10 @@ public class CrudVideoWindow {
     buttonModificar.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-
+        imagePanel.removeAll();
+        new TableVideoWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonModificar);
@@ -85,7 +95,10 @@ public class CrudVideoWindow {
     buttonBack.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-
+        imagePanel.removeAll();
+        new InitialWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonBack);

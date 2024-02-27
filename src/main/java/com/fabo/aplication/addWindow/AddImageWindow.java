@@ -75,7 +75,7 @@ public class AddImageWindow {
 	}
 
 	private void initLabelNombre() {
-		JLabel labelNombre = new JLabel("NOMBRE DEL PDF:");
+		JLabel labelNombre = new JLabel("NOMBRE DE LA IMAGEN:");
 		labelNombre.setBounds((int) (Constants.WIDTH * 0.075), (int) (Constants.HEIGHT * 0.275),
 				(int) ((int) (Constants.WIDTH * 0.45)),
 				(int) (Constants.HEIGHT * 0.055));

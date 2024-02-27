@@ -16,32 +16,29 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.fabo.aplication.InitialWindow;
-import com.fabo.aplication.crudwindow.CrudImageWindow;
-import com.fabo.aplication.models.Image;
-import com.fabo.aplication.services.ImageService;
-import com.fabo.aplication.showWindow.ShowImageWindow;
+import com.fabo.aplication.models.Auditory;
+import com.fabo.aplication.services.AuditoryService;
 import com.fabo.aplication.utils.Constants;
 import com.fabo.aplication.utils.CustomButton;
 import com.fabo.aplication.utils.CustomFormat;
 import com.fabo.aplication.utils.ImagePanel;
 
-public class TableImageWindow {
+public class TableAuditoryWindow {
   private ImagePanel imagePanel;
   private JLabel codigoLabel, nombreLabel, seleccionadoLabel;
   private JTextField seleccionadoField;
-  private CustomButton verDetalleBtn, botonRegresar;
+  private CustomButton botonRegresar;
   private DefaultTableModel tableModel;
   private JComboBox<String> comboBox;
-  private ImageService imagenReg;
-  private Image imagen;
-  List<Image> listaRegistro = new ArrayList<>();
-  private String[][] m; // Cambiar el 15 por el tamaño de datos
+  private AuditoryService auditoriaReg;
+  List<Auditory> listaRegistros = new ArrayList<>();
+  private String[][] m;
   JScrollPane scrollPane;
 
-  public TableImageWindow() {
+  public TableAuditoryWindow() {
     imagePanel = ImagePanel.getInstance();
     imagePanel.setLayout(null);
-    this.imagenReg = new ImageService();
+    this.auditoriaReg = new AuditoryService();
     initComponentes();
     imagePanel.repaint();
     imagePanel.revalidate();
@@ -57,7 +54,7 @@ public class TableImageWindow {
   }
 
   private void initLabelPeliculaSeleccionada() {
-    codigoLabel = new JLabel("LISTADO DE IMAGENES");
+    codigoLabel = new JLabel("LISTADO DE AUDITORIAS");
     codigoLabel.setBounds((int) (Constants.WIDTH * 0.30), (int) (Constants.HEIGHT * 0.05),
         (int) (Constants.WIDTH * 0.45),
         (int) (Constants.HEIGHT * 0.055));
@@ -82,29 +79,9 @@ public class TableImageWindow {
     imagePanel.add(seleccionadoField);
   }
 
-  private void botonVerDeTalle() {
-    verDetalleBtn = new CustomButton();
-    verDetalleBtn.setBounds((Constants.WIDTH * 2 / 17) / 2, (int) (Constants.HEIGHT * 0.60),
-        (int) (Constants.WIDTH * 5 / 17),
-        (int) (Constants.HEIGHT * 7 / 72));
-    CustomFormat.formato(verDetalleBtn, 0, (float) (Constants.HEIGHT * 0.03), (int) (Constants.WIDTH * 0.05),
-        (int) (Constants.WIDTH * 0.0017));
-    verDetalleBtn.setText("VER DETALLE");
-    verDetalleBtn.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        imagePanel.removeAll();
-        new ShowImageWindow(imagen);
-        imagePanel.repaint();
-        imagePanel.revalidate();
-      }
-    });
-    imagePanel.add(verDetalleBtn);
-  }
-
-  private void botonRegresar() {
+  private void botonBack() {
     botonRegresar = new CustomButton();
-    botonRegresar.setBounds((Constants.WIDTH * 2 / 17) / 2, (int) (Constants.HEIGHT * 0.75),
+    botonRegresar.setBounds((Constants.WIDTH * 2 / 17) / 2, (int) (Constants.HEIGHT * 0.70),
         (int) (Constants.WIDTH * 5 / 17),
         (int) (Constants.HEIGHT * 7 / 72));
     CustomFormat.formato(botonRegresar, 0, (float) (Constants.HEIGHT * 0.03), (int) (Constants.WIDTH * 0.05),
@@ -114,7 +91,7 @@ public class TableImageWindow {
       @Override
       public void mouseClicked(MouseEvent e) {
         imagePanel.removeAll();
-        new CrudImageWindow();
+        new InitialWindow();
         imagePanel.repaint();
         imagePanel.revalidate();
       }
@@ -123,33 +100,27 @@ public class TableImageWindow {
   }
 
   private void initComponentes() {
-    cargarDatos();
+    listaRegistros = auditoriaReg.extraerRegistros("todos_todos");
     initLabelPeliculaSeleccionada();
     initLabelTitulo();
     initTabla();
     initSeleccionada();
     funcionarComboBox();
-    botonVerDeTalle();
-    botonRegresar();
-  }
-
-  private void cargarDatos() {
-    listaRegistro = imagenReg.extraerRegistros();
+    botonBack();
   }
 
   private void initTabla() {
-    m = new String[listaRegistro.size()][5];
+    m = new String[listaRegistros.size()][4];
     int ind = 0;
-    for (Image c : listaRegistro) {
+    for (Auditory c : listaRegistros) {
       m[ind][0] = Integer.toString(c.getId());
-      m[ind][1] = c.getTitulo();
-      m[ind][2] = Integer.toString(c.getId_proy());
-      m[ind][3] = c.getUrl();
-      m[ind][4] = Integer.toString(c.getVisualizacion());
+      m[ind][1] = c.getOrigen();
+      m[ind][2] = c.getFecha();
+      m[ind][3] = c.getAccion();
       ind++;
     }
 
-    String[] cabecera = { "ID", "TÍTULO", "ID_PROY", "URL", "VISUALIZACION" };
+    String[] cabecera = { "ID", "ORIGEN", "FECHA", "ACCION" };
     tableModel = new DefaultTableModel(m, cabecera);
     JTable table = new JTable(tableModel);
     for (int i = 0; i < cabecera.length; i++) {
@@ -173,12 +144,6 @@ public class TableImageWindow {
         int filaSeleccionada = table.getSelectedRow();
         // Verificar si se hizo clic en una fila válida
         if (filaSeleccionada != -1) {
-          for (Image i : listaRegistro) {
-            if (i.getId() == Integer.valueOf(m[filaSeleccionada][0])) {
-              imagen = i;
-              break;
-            }
-          }
           mostrarNombreDePelicula(filaSeleccionada, m);
         }
       }
@@ -187,20 +152,19 @@ public class TableImageWindow {
 
   }
 
-  private void mostrarTodos() {
-    // tableModel.setRowCount(0);
-    m = new String[listaRegistro.size()][5];
+  private void mostrarTodos(String where) {
+    listaRegistros = auditoriaReg.extraerRegistros(where);
+    m = new String[listaRegistros.size()][4];
     int ind = 0;
-    for (Image c : listaRegistro) {
+    for (Auditory c : listaRegistros) {
       m[ind][0] = Integer.toString(c.getId());
-      m[ind][1] = c.getTitulo();
-      m[ind][2] = Integer.toString(c.getId_proy());
-      m[ind][3] = c.getUrl();
-      m[ind][4] = Integer.toString(c.getVisualizacion());
+      m[ind][1] = c.getOrigen();
+      m[ind][2] = c.getFecha();
+      m[ind][3] = c.getAccion();
       ind++;
     }
 
-    String[] cabecera = { "ID", "TÍTULO", "ID_PROY", "URL", "VISUALIZACION" };
+    String[] cabecera = { "ID", "ORIGEN", "FECHA", "ACCION" };
     tableModel.setDataVector(m, cabecera);
     tableModel.fireTableDataChanged();
     JTable table = new JTable(tableModel);
@@ -209,8 +173,9 @@ public class TableImageWindow {
     }
     table.setDefaultEditor(Object.class, null);
     table.getTableHeader().setEnabled(false);
+    table.getTableHeader().setBackground(Color.decode("#C2B221"));
     table.setRowHeight(40);
-    table.setBackground(Color.cyan);
+    table.setBackground(Color.decode("#C2B221"));
     table.getColumnModel().getColumn(0).setPreferredWidth(140);
     table.getColumnModel().getColumn(1).setPreferredWidth(100);
     table.setFont(table.getFont().deriveFont(18f));
@@ -220,7 +185,6 @@ public class TableImageWindow {
       @Override
       public void mouseClicked(MouseEvent e) {
         int filaSeleccionada = table.getSelectedRow();
-        // Verificar si se hizo clic en una fila válida
         if (filaSeleccionada != -1) {
           mostrarNombreDePelicula(filaSeleccionada, m);
         }
@@ -231,8 +195,12 @@ public class TableImageWindow {
   }
 
   private void funcionarComboBox() {
-    String[] opciones = { "Todos", "Solo disponibles", "Solo no disponibles" };
+    String[] opciones = { "Todos_Todos", "INSERT_Todos", "UPDATE_Todos",
+        "Todos_Video", "INSERT_Video", "UPDATE_Video",
+        "Todos_Pdf", "INSERT_Pdf", "UPDATE_Pdf",
+        "Todos_Imagen", "INSERT_Imagen", "UPDATE_Imagen" };
     comboBox = new JComboBox<>(opciones);
+    comboBox.setBackground(Color.decode("#6688D4"));
     comboBox.setBounds(70, 160, 400, 50);
     comboBox.setBackground(Color.decode("#09599B"));
     CustomFormat.formato(comboBox, 1, (float) (Constants.HEIGHT * 0.040));
@@ -240,18 +208,7 @@ public class TableImageWindow {
       @Override
       public void actionPerformed(ActionEvent e) {
         String opcionSeleccionada = comboBox.getSelectedItem().toString();
-        // tableModel.setRowCount(0);
-        // Realizar acciones según la opción seleccionada
-        if (opcionSeleccionada.equals("Todos")) {
-          listaRegistro = imagenReg.extraerRegistros();
-          mostrarTodos();
-        } else if (opcionSeleccionada.equals("Solo disponibles")) {
-          listaRegistro = imagenReg.extraerVisualizables();
-          mostrarTodos();
-        } else if (opcionSeleccionada.equals("Solo no disponibles")) {
-          listaRegistro = imagenReg.extraerNoVisualizables();
-          mostrarTodos();
-        }
+        mostrarTodos(opcionSeleccionada.toLowerCase());
       }
 
     });

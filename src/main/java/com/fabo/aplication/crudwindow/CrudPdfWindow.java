@@ -5,6 +5,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+import com.fabo.aplication.InitialWindow;
+import com.fabo.aplication.addWindow.AddPdfWindow;
+import com.fabo.aplication.tableWindow.TablePdfWindow;
 import com.fabo.aplication.utils.Constants;
 import com.fabo.aplication.utils.CustomButton;
 import com.fabo.aplication.utils.CustomFormat;
@@ -29,7 +32,7 @@ public class CrudPdfWindow {
   }
 
   private void initLabels() {
-    JLabel Text = new JLabel("CRUD DE IMAGENES");
+    JLabel Text = new JLabel("CRUD DE PDF");
     Text.setHorizontalAlignment(JLabel.CENTER);
     Text.setBounds((int) (Constants.WIDTH * 0.05), (int) (Constants.HEIGHT * 0.09), (int) (Constants.WIDTH * 0.9),
         (int) (Constants.HEIGHT * 0.1));
@@ -54,6 +57,10 @@ public class CrudPdfWindow {
     buttonAgregar.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
+        imagePanel.removeAll();
+        new AddPdfWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonAgregar);
@@ -69,7 +76,10 @@ public class CrudPdfWindow {
     buttonModificar.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-
+        imagePanel.removeAll();
+        new TablePdfWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonModificar);
@@ -85,7 +95,10 @@ public class CrudPdfWindow {
     buttonBack.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-
+        imagePanel.removeAll();
+        new InitialWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonBack);

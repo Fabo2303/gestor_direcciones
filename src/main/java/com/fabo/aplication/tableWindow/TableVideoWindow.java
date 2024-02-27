@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.fabo.aplication.InitialWindow;
+import com.fabo.aplication.crudwindow.CrudVideoWindow;
 import com.fabo.aplication.models.Video;
 import com.fabo.aplication.services.VideoService;
 import com.fabo.aplication.showWindow.ShowVideoWindow;
@@ -56,7 +57,7 @@ public class TableVideoWindow {
   }
 
   private void initLabelPeliculaSeleccionada() {
-    codigoLabel = new JLabel("LISTADO DE IMAGENES");
+    codigoLabel = new JLabel("LISTADO DE VIDEOS");
     codigoLabel.setBounds((int) (Constants.WIDTH * 0.30), (int) (Constants.HEIGHT * 0.05),
         (int) (Constants.WIDTH * 0.45),
         (int) (Constants.HEIGHT * 0.055));
@@ -113,7 +114,7 @@ public class TableVideoWindow {
       @Override
       public void mouseClicked(MouseEvent e) {
         imagePanel.removeAll();
-        new InitialWindow();
+        new CrudVideoWindow();
         imagePanel.repaint();
         imagePanel.revalidate();
       }

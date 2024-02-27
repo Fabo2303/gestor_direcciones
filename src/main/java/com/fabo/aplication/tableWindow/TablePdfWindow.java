@@ -15,7 +15,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import com.fabo.aplication.InitialWindow;
+import com.fabo.aplication.crudwindow.CrudPdfWindow;
 import com.fabo.aplication.models.Pdf;
 import com.fabo.aplication.services.PdfService;
 import com.fabo.aplication.showWindow.ShowPdfWindow;
@@ -56,7 +56,7 @@ public class TablePdfWindow {
   }
 
   private void initLabelPeliculaSeleccionada() {
-    codigoLabel = new JLabel("LISTADO DE IMAGENES");
+    codigoLabel = new JLabel("LISTADO DE PDF");
     codigoLabel.setBounds((int) (Constants.WIDTH * 0.30), (int) (Constants.HEIGHT * 0.05),
         (int) (Constants.WIDTH * 0.45),
         (int) (Constants.HEIGHT * 0.055));
@@ -113,7 +113,7 @@ public class TablePdfWindow {
       @Override
       public void mouseClicked(MouseEvent e) {
         imagePanel.removeAll();
-        new InitialWindow();
+        new CrudPdfWindow();
         imagePanel.repaint();
         imagePanel.revalidate();
       }

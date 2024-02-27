@@ -9,10 +9,10 @@ import java.util.logging.Logger;
 public class DatabaseConnection {
   public static Connection getConnection() {
     try {
-      Class.forName("oracle.jdbc.driver.OracleDriver"); // DRIVER DE SQL DEVELOPER
-      String myDB = "jdbc:oracle:thin:@localhost:1521:XE";// URL DE SQL DEVELOPER
-      String usuario = "SCGPDESA";
-      String password = "123";
+      Class.forName("com.mysql.cj.jdbc.Driver");
+      String myDB = "jdbc:mysql://localhost:3306/nombre_de_tu_base_de_datos";
+      String usuario = "tu_usuario";
+      String password = "tu_contraseña";
       return DriverManager.getConnection(myDB, usuario, password);
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());

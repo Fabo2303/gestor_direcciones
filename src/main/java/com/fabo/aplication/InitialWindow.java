@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import com.fabo.aplication.crudwindow.CrudImageWindow;
 import com.fabo.aplication.crudwindow.CrudPdfWindow;
 import com.fabo.aplication.crudwindow.CrudVideoWindow;
+import com.fabo.aplication.tableWindow.TableAuditoryWindow;
 import com.fabo.aplication.utils.Constants;
 import com.fabo.aplication.utils.CustomButton;
 import com.fabo.aplication.utils.CustomFormat;
@@ -118,6 +119,10 @@ public class InitialWindow {
     buttonAuditoria.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
+        imagePanel.removeAll();
+        new TableAuditoryWindow();
+        imagePanel.repaint();
+        imagePanel.revalidate();
       }
     });
     imagePanel.add(buttonAuditoria);
