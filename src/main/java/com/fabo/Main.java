@@ -15,7 +15,7 @@ public class Main {
     public static void initApp() {
         JFrame ventana = new JFrame();
         ventana.setSize(1280, 720);
-        ventana.setTitle("San Marcos MAP");
+        ventana.setTitle("Gestor de direcciones - MySQL");
         ventana.setLocationRelativeTo(null);
         ventana.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         ImagePanel panel = ImagePanel.getInstance();
